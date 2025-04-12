@@ -13,6 +13,12 @@ app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
 
+const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN);
+
+// Set the webhook URL for Telegram to send updates to your Render app
+const webhookUrl = `https://t-accountability-bot.onrender.com/bot`;  // Replace with your Render URL
+bot.setWebHook(webhookUrl);
+
 // Add this before app.listen()
 app.post('/bot', (req, res) => {
   bot.processUpdate(req.body);
