@@ -7,7 +7,8 @@ const cors = require('cors');
 const usersRoute = require('./routes/users');
 const winsRoute = require('./routes/wins');
 const leaderboardRoute = require('./routes/leaderboard')
-const scoreRoute = require('./routes/score')
+const scoreRoute = require('./routes/score');
+const TelegramBot = require('node-telegram-bot-api');
 
 app.use(express.json());
 app.use(cors());
