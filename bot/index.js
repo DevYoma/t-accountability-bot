@@ -8,7 +8,8 @@ const baseUrl = process.env.BASE_URL;
 // const apiUrl = `${baseUrl}/api/endpoint`; // example usage
 
 
-const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
+// const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
+const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN);
 // console.log(bot);
 console.log("Bot started. use the /start command to get started")
 

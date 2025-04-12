@@ -13,6 +13,12 @@ app.use(express.json());
 app.use(cors());
 app.use(bodyParser.json());
 
+// Add this before app.listen()
+app.post('/bot', (req, res) => {
+  bot.processUpdate(req.body);
+  res.sendStatus(200);
+});
+
 app.use('/api/users', usersRoute);
 app.use('/api/wins', winsRoute);
 app.use('/api/leaderboard', leaderboardRoute)
