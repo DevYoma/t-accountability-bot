@@ -21,9 +21,15 @@ const webhookUrl = `https://t-accountability-bot.onrender.com/bot`;  // Replace 
 bot.setWebHook(webhookUrl);
 
 // Add this before app.listen()
-app.post('/bot', (req, res) => {
-  bot.processUpdate(req.body);
-  res.sendStatus(200);
+app.post("/bot", (req, res) => {
+  console.log("Received update:", req.body); // Log the incoming request body
+  try {
+    bot.processUpdate(req.body); // Process the update
+    res.sendStatus(200); // Respond with status 200 if successful
+  } catch (error) {
+    console.error("Error processing update:", error); // Log errors if something goes wrong
+    res.sendStatus(500); // Send status 500 if there was an error
+  }
 });
 
 app.use('/api/users', usersRoute);
