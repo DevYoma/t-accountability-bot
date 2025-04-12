@@ -124,7 +124,7 @@ bot.on('message', async (msg, match) => {
   }
 
     try {
-      await axios.post(`${baseUrl}/api/wins/wins`, {
+      await axios.post(`${baseUrl}api/wins/wins`, {
         telegram_id,
         wins,
       });
