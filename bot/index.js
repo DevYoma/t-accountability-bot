@@ -2,8 +2,11 @@ require('dotenv').config();
 const TelegramBot = require('node-telegram-bot-api');
 const axios = require('axios');
 
-// const ADMIN_IDS = [123456789, 987654321];
-const ADMIN_IDS = [5266056726]
+const ADMIN_IDS = [484849494, 985564566];
+
+const baseUrl = process.env.BASE_URL;
+// const apiUrl = `${baseUrl}/api/endpoint`; // example usage
+
 
 const bot = new TelegramBot(process.env.TELEGRAM_BOT_TOKEN, { polling: true });
 // console.log(bot);
@@ -15,7 +18,7 @@ bot.onText(/\/start/, async (msg) => {
   const { id: telegram_id, first_name, username } = msg.from;
 
   try {
-    await axios.post('http://localhost:3000/api/users/register', {
+    await axios.post(`${baseUrl}/api/users/register`, {
       telegram_id,
       fullname: first_name,
       username,
@@ -27,7 +30,7 @@ bot.onText(/\/start/, async (msg) => {
      bot.sendMessage(msg.chat.id, `Welcome, ${first_name}! Let's start tracking your wins 🎉`);
     bot.sendMessage(
       msg.chat.id,
-      `To begin, please submit your wins for today by typing /win.`
+      `To begin, please submit your wins for today by typing /wins.`
     );
   } catch (error) {
     const message = error.response?.data?.error || "Some  thing went wrong";    
@@ -46,10 +49,19 @@ bot.onText(/\/win/, (msg) => {
   // Set state to waiting_for_win_text
   userStates[telegram_id] = { step: 'waiting_for_win_text' };
 
+  // bot.sendMessage(
+  //   msg.chat.id,
+  //   `Great! What did you accomplish today? List your wins separated by commas.\n\nFor example: Completed a task, Finished my workout, Read a chapter of a book`
+  // );
+
   bot.sendMessage(
     msg.chat.id,
-    `Great! What did you accomplish today? List your wins separated by commas.\n\nFor example: "Completed a task, Finished my workout, Read a chapter of a book"`
+    `Great! What did you accomplish today? List your wins separated by commas.\n\nFor example: *Completed a task*, *Finished my workout*, *Read a chapter of a book*`,
+    {
+      parse_mode: 'Markdown', // Enables Markdown formatting
+    }
   );
+
 }); 
 
 // --- Handle free text messages (for logging wins) ---
@@ -71,7 +83,7 @@ bot.on('message', async (msg, match) => {
   }
 
     try {
-      await axios.post('http://localhost:3000/api/wins/wins', {
+      await axios.post(`${baseUrl}/api/wins/wins`, {
         telegram_id,
         wins,
       });
@@ -94,7 +106,7 @@ bot.onText(/\/score/, async (msg) => {
 
   try {
     // Call your backend to get user stats
-    const response = await axios.post('http://localhost:3000/api/score', {
+    const response = await axios.post(`${baseUrl}/api/score`, {
       telegram_id,
     });
 
@@ -133,7 +145,7 @@ bot.onText(/\/leaderboard/, async (msg) => {
 
   try {
     // Call your backend or Supabase to get top users
-    const res = await axios.get('http://localhost:3000/api/leaderboard');
+    const res = await axios.get(`${baseUrl}/api/leaderboard`);
 
     const leaderboard = res.data; // assume it's an array of { fullname, points }
     if (!leaderboard.length) {
