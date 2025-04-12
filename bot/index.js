@@ -26,7 +26,7 @@ bot.onText(/\/start/, async (msg) => {
       username,
     });
 
-    const response = await axios.post(`${baseUrl}/api/users/register`, {
+    const response = await axios.post(`${baseUrl}api/users/register`, {
       telegram_id,
       fullname: first_name,
       username,
@@ -147,7 +147,7 @@ bot.onText(/\/score/, async (msg) => {
 
   try {
     // Call your backend to get user stats
-    const response = await axios.post(`${baseUrl}/api/score`, {
+    const response = await axios.post(`${baseUrl}api/score`, {
       telegram_id,
     });
 
@@ -186,7 +186,7 @@ bot.onText(/\/leaderboard/, async (msg) => {
 
   try {
     // Call your backend or Supabase to get top users
-    const res = await axios.get(`${baseUrl}/api/leaderboard`);
+    const res = await axios.get(`${baseUrl}api/leaderboard`);
 
     const leaderboard = res.data; // assume it's an array of { fullname, points }
     if (!leaderboard.length) {
