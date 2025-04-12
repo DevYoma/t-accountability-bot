@@ -19,25 +19,65 @@ bot.onText(/\/start/, async (msg) => {
   const { id: telegram_id, first_name, username } = msg.from;
 
   try {
-    await axios.post(`${baseUrl}/api/users/register`, {
+    // Log the data you're sending
+    console.log("Sending user registration data:", {
       telegram_id,
       fullname: first_name,
       username,
     });
-  
+
+    const response = await axios.post(`${baseUrl}/api/users/register`, {
+      telegram_id,
+      fullname: first_name,
+      username,
+    });
+
+    // Log the response from the API
+    console.log("API Response:", response.data);
+
     // Set state to "awaiting_wins"
-    userStates[telegram_id] = { step: 'awaiting_wins' };
-  
-     bot.sendMessage(msg.chat.id, `Welcome, ${first_name}! Let's start tracking your wins 🎉`);
+    userStates[telegram_id] = { step: "awaiting_wins" };
+
+    bot.sendMessage(
+      msg.chat.id,
+      `Welcome, ${first_name}! Let's start tracking your wins 🎉`
+    );
     bot.sendMessage(
       msg.chat.id,
       `To begin, please submit your wins for today by typing /wins.`
     );
   } catch (error) {
-    const message = error.response?.data?.error || "Some  thing went wrong";    
-    bot.sendMessage(msg.chat.id, `❌ ${message}`)
+    // Log the full error response
+    console.error("Error in /start command:", error);
+
+    const message = error.response?.data?.error || "Something went wrong";
+    bot.sendMessage(msg.chat.id, `❌ ${message}`);
   }
 });
+
+// bot.onText(/\/start/, async (msg) => {
+//   const { id: telegram_id, first_name, username } = msg.from;
+
+//   try {
+//     await axios.post(`${baseUrl}/api/users/register`, {
+//       telegram_id,
+//       fullname: first_name,
+//       username,
+//     });
+  
+//     // Set state to "awaiting_wins"
+//     userStates[telegram_id] = { step: 'awaiting_wins' };
+  
+//      bot.sendMessage(msg.chat.id, `Welcome, ${first_name}! Let's start tracking your wins 🎉`);
+//     bot.sendMessage(
+//       msg.chat.id,
+//       `To begin, please submit your wins for today by typing /wins.`
+//     );
+//   } catch (error) {
+//     const message = error.response?.data?.error || "Some  thing went wrong";    
+//     bot.sendMessage(msg.chat.id, `❌ ${message}`)
+//   }
+// });
 
 // getting my TELEGRAM id
 bot.onText(/\/id/, (msg) => {
