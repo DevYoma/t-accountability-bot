@@ -165,3 +165,5 @@ bot.onText(/\/leaderboard/, async (msg) => {
     bot.sendMessage(chatId, '❌ Failed to load leaderboard.');
   }
 });
+
+module.exports = bot;
